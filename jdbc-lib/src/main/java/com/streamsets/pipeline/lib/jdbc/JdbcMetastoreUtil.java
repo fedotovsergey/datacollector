@@ -81,7 +81,9 @@ public class JdbcMetastoreUtil {
         jdbcTypeInfo = jdbcType.getSupport().generateJdbcTypeInfoFromRecordField(currField, schemaWriter);
       }
 
-      columns.put(pair.getKey(), jdbcTypeInfo);
+      String columnName = pair.getKey();
+      if (!schemaWriter.hasDelimitedIdentifier()) columnName = columnName.toLowerCase();
+      columns.put(columnName, jdbcTypeInfo);
     }
     return columns;
   }

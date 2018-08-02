@@ -78,4 +78,6 @@ public interface JdbcSchemaWriter {
    * @return Default schema name, or null if there isn't one
    */
   String getDefaultSchema();
+
+  boolean hasDelimitedIdentifier();
 }
