@@ -68,6 +68,7 @@ public class JdbcMetadataProcessor extends RecordProcessor {
   private final String tableNameEL;
   private final HikariPoolConfigBean hikariConfigBean;
   private final DecimalDefaultsConfig decimalDefaultsConfig;
+  private final boolean encloseTableName;
 
   // Database cache only holds metadata for databases
   private LoadingCache<Pair<String, String>, LinkedHashMap<String, JdbcTypeInfo>> tableCache;
@@ -90,6 +91,7 @@ public class JdbcMetadataProcessor extends RecordProcessor {
   }
 
   JdbcMetadataProcessor(JdbcMetadataConfigBean configBean) {
+    this.encloseTableName = configBean.encloseTableName;
     this.schemaEL = configBean.schemaEL;
     this.tableNameEL = configBean.tableNameEL;
     this.hikariConfigBean = configBean.hikariConfigBean;
@@ -112,7 +114,7 @@ public class JdbcMetadataProcessor extends RecordProcessor {
     if (issues.isEmpty() && null == dataSource) {
       try {
         dataSource = JdbcUtil.createDataSourceForWrite(hikariConfigBean, null, null,
-            false,
+            encloseTableName,
             issues,
             Collections.emptyList(),
             getContext()
@@ -125,7 +127,7 @@ public class JdbcMetadataProcessor extends RecordProcessor {
 
     if (issues.isEmpty()) {
       try {
-        schemaWriter = JdbcSchemaWriterFactory.create(hikariConfigBean.connectionString, dataSource);
+        schemaWriter = JdbcSchemaWriterFactory.create(hikariConfigBean.connectionString, dataSource, encloseTableName);
       } catch (JdbcStageCheckedException e) {
         issues.add(getContext().createConfigIssue(Groups.JDBC.name(), CONNECTION_STRING, e.getErrorCode(), e.getParams()));
       }

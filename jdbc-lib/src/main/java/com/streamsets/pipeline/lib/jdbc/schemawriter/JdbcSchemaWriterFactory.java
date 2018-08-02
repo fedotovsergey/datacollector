@@ -20,12 +20,12 @@ import com.streamsets.pipeline.lib.jdbc.JdbcStageCheckedException;
 import com.zaxxer.hikari.HikariDataSource;
 
 public class JdbcSchemaWriterFactory {
-  public static JdbcSchemaWriter create(String connectionString, HikariDataSource dataSource) throws
+  public static JdbcSchemaWriter create(String connectionString, HikariDataSource dataSource, boolean useDelimitedIdentifier) throws
       JdbcStageCheckedException {
     if (connectionString.startsWith(H2SchemaWriter.getConnectionPrefix())) {
-      return new H2SchemaWriter(dataSource);
+      return new H2SchemaWriter(dataSource, useDelimitedIdentifier);
     } else if (connectionString.startsWith(PostgresSchemaWriter.getConnectionPrefix())) {
-      return new PostgresSchemaWriter(dataSource);
+      return new PostgresSchemaWriter(dataSource, useDelimitedIdentifier);
     } else {
       throw new JdbcStageCheckedException(JdbcErrors.JDBC_309, connectionString);
     }

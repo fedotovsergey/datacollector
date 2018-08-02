@@ -48,6 +48,18 @@ public class JdbcMetadataConfigBean {
   )
   public String tableNameEL;
 
+  @ConfigDef(
+          required = true,
+          type = ConfigDef.Type.BOOLEAN,
+          label = "Enclose Object Names",
+          description = "Use for lower or mixed-case database, table and field names. " +
+                  "Select only when the database or tables were created with quotation marks around the names.",
+          displayPosition = 35,
+          group = "JDBC",
+          defaultValue = "false"
+  )
+  public boolean encloseTableName;
+
   @ConfigDefBean
   public HikariPoolConfigBean hikariConfigBean;
 

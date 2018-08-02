@@ -37,13 +37,14 @@ public class H2SchemaWriter extends JdbcAbstractSchemaWriter {
       .put(JdbcType.TIMESTAMP, "timestamp")
       .put(JdbcType.BINARY, "bytea")
       .put(JdbcType.BOOLEAN, "boolean")
+      .put(JdbcType.SHORT, "smallint")
       .build();
   // Actual maxima are higher, but we just use H2 for testing
   private static final int MAX_SCALE = 1000000;
   private static final int MAX_PRECISION = 1000000;
 
-  public H2SchemaWriter(HikariDataSource dataSource) {
-    super(dataSource);
+  public H2SchemaWriter(HikariDataSource dataSource, boolean useDelimitedIdentifier) {
+    super(dataSource, useDelimitedIdentifier);
   }
 
   // H2 wants an ALTER TABLE command per column

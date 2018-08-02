@@ -39,7 +39,8 @@ public enum JdbcType {
   DOUBLE(new PrimitiveJdbcTypeSupport()),
   DECIMAL(new DecimalJdbcTypeSupport()),
   BINARY(new PrimitiveJdbcTypeSupport()),
-  VARCHAR(new PrimitiveJdbcTypeSupport())
+  VARCHAR(new PrimitiveJdbcTypeSupport()),
+  SHORT(new PrimitiveJdbcTypeSupport())
   ;
   static Map<Integer, JdbcType> sqlToJdbcType = ImmutableMap.<Integer, JdbcType>builder()
       // TBD - fill this out
@@ -57,6 +58,7 @@ public enum JdbcType {
       .put(Types.DECIMAL, DECIMAL)
       .put(Types.BINARY, BINARY)
       .put(Types.VARCHAR, VARCHAR)
+      .put(Types.SMALLINT, SHORT)
       .build();
 
   JdbcTypeSupport support;
@@ -88,6 +90,7 @@ public enum JdbcType {
       case DECIMAL: return JdbcType.DECIMAL;
       case STRING: return JdbcType.VARCHAR;
       case BYTE_ARRAY: return JdbcType.BINARY;
+      case SHORT: return JdbcType.SHORT;
       default: throw new JdbcStageCheckedException(JdbcErrors.JDBC_302, fieldType);
     }
   }
@@ -111,6 +114,7 @@ public enum JdbcType {
       case DECIMAL: return Field.Type.DECIMAL;
       case BINARY: return Field.Type.BYTE_ARRAY;
       case VARCHAR: return Field.Type.STRING;
+      case SHORT: return Field.Type.SHORT;
       default: throw new JdbcStageCheckedException(JdbcErrors.JDBC_302, JdbcType);
     }
   }

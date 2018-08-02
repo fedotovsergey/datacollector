@@ -35,13 +35,14 @@ public class PostgresSchemaWriter extends JdbcAbstractSchemaWriter {
       .put(JdbcType.TIMESTAMP, "timestamp")
       .put(JdbcType.BINARY, "bytea")
       .put(JdbcType.BOOLEAN, "boolean")
+      .put(JdbcType.SHORT, "smallint")
       .build();
   private static final int MAX_PRECISION = 16383;
   private static final int MAX_SCALE = 131072;
   private static final String DEFAULT_SCHEMA = "public";
 
-  public PostgresSchemaWriter(HikariDataSource dataSource) {
-    super(dataSource);
+  public PostgresSchemaWriter(HikariDataSource dataSource, boolean useDelimitedIdentifier) {
+    super(dataSource, useDelimitedIdentifier);
   }
 
   @Override

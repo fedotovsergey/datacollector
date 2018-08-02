@@ -34,14 +34,17 @@ public abstract class JdbcAbstractSchemaWriter implements JdbcSchemaWriter {
   private static final Logger LOG = LoggerFactory.getLogger(JdbcAbstractSchemaWriter.class);
   private static final String PRECISION = "precision";
   private static final String SCALE = "scale";
+  private static final char QUOTED_IDENTIFIER = '"';
 
   protected static final String CREATE_TABLE = "CREATE TABLE";
   protected static final String ALTER_TABLE = "ALTER TABLE";
 
   private final HikariDataSource dataSource;
+  private final boolean useDelimitedIdentifier;
 
-  JdbcAbstractSchemaWriter(HikariDataSource dataSource) {
+  JdbcAbstractSchemaWriter(HikariDataSource dataSource, boolean useDelimitedIdentifier) {
     this.dataSource = dataSource;
+    this.useDelimitedIdentifier = useDelimitedIdentifier;
   }
 
   private void executeStatement(String sqlString) throws JdbcStageCheckedException {
@@ -72,8 +75,14 @@ public abstract class JdbcAbstractSchemaWriter implements JdbcSchemaWriter {
   ) {
     StringBuilder sqlString = new StringBuilder(CREATE_TABLE + " ");
     String tableSchema = (schema == null) ? getDefaultSchema() : schema;
+
+    char identifierOpenDelimiter = getIdentifierOpenDelimiter();
+    char identifierCloseDelimiter = getIdentifierCloseDelimiter();
+
     if (tableSchema != null) {
+      if (useDelimitedIdentifier) sqlString.append(identifierOpenDelimiter);
       sqlString.append(tableSchema);
+      if (useDelimitedIdentifier) sqlString.append(identifierCloseDelimiter);
       sqlString.append(".");
     }
     sqlString.append(tableName);
@@ -85,9 +94,12 @@ public abstract class JdbcAbstractSchemaWriter implements JdbcSchemaWriter {
       } else {
         sqlString.append(",\n");
       }
-      sqlString
-          .append(entry.getKey())
-          .append(" ")
+
+      if (useDelimitedIdentifier) sqlString.append(identifierOpenDelimiter);
+      sqlString.append(entry.getKey());
+      if (useDelimitedIdentifier) sqlString.append(identifierCloseDelimiter);
+
+      sqlString.append(" ")
           .append(entry.getValue().toString());
     }
     sqlString.append("\n);");
@@ -100,8 +112,14 @@ public abstract class JdbcAbstractSchemaWriter implements JdbcSchemaWriter {
   ) {
     StringBuilder sqlString = new StringBuilder(ALTER_TABLE + " ");
     String tableSchema = (schema == null) ? getDefaultSchema() : schema;
+
+    char identifierOpenDelimiter = getIdentifierOpenDelimiter();
+    char identifierCloseDelimiter = getIdentifierCloseDelimiter();
+
     if (tableSchema != null) {
+      if (useDelimitedIdentifier) sqlString.append(identifierOpenDelimiter);
       sqlString.append(tableSchema);
+      if (useDelimitedIdentifier) sqlString.append(identifierCloseDelimiter);
       sqlString.append(".");
     }
     sqlString.append(tableName);
@@ -115,9 +133,13 @@ public abstract class JdbcAbstractSchemaWriter implements JdbcSchemaWriter {
       }
       sqlString
           .append("ADD COLUMN")
-          .append(" ")
-          .append(entry.getKey())
-          .append(" ")
+          .append(" ");
+
+      if (useDelimitedIdentifier) sqlString.append(identifierOpenDelimiter);
+      sqlString.append(entry.getKey());
+      if (useDelimitedIdentifier) sqlString.append(identifierCloseDelimiter);
+
+      sqlString.append(" ")
           .append(entry.getValue().toString());
     }
     sqlString.append(";");
@@ -162,4 +184,12 @@ public abstract class JdbcAbstractSchemaWriter implements JdbcSchemaWriter {
 
   @Override
   public String getDefaultSchema() { return null; }
+
+  protected char getIdentifierOpenDelimiter() {
+    return QUOTED_IDENTIFIER;
+  }
+
+  protected char getIdentifierCloseDelimiter() {
+    return QUOTED_IDENTIFIER;
+  }
 }
