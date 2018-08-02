@@ -85,7 +85,9 @@ public abstract class JdbcAbstractSchemaWriter implements JdbcSchemaWriter {
       if (useDelimitedIdentifier) sqlString.append(identifierCloseDelimiter);
       sqlString.append(".");
     }
+    if (useDelimitedIdentifier) sqlString.append(identifierOpenDelimiter);
     sqlString.append(tableName);
+    if (useDelimitedIdentifier) sqlString.append(identifierCloseDelimiter);
     sqlString.append("(\n");
     boolean first = true;
     for (Map.Entry<String, JdbcTypeInfo> entry : recordStructure.entrySet()) {
