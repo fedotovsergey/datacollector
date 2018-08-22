@@ -112,6 +112,11 @@ public abstract class JdbcBaseRecordWriter implements JdbcRecordWriter {
       Types.TIMESTAMP
   ));
 
+  private Set<Integer> booleanTypes = new HashSet<>(Arrays.asList(
+      Types.BIT,
+      Types.BOOLEAN
+  ));
+
   // Index of columns returned by DatabaseMetaData.getColumns. Defined in DatabaseMetaData class.
   private static final int COLUMN_NAME = 4;
   private static final int DATA_TYPE = 5;
@@ -458,6 +463,9 @@ public abstract class JdbcBaseRecordWriter implements JdbcRecordWriter {
     return binaryTypes.contains(columnType);
   }
 
+  boolean isColumnTypeBoolean(int columnType) {
+    return booleanTypes.contains(columnType);
+  }
 
   int setParamsToStatement(int paramIdx,
                 PreparedStatement statement,
@@ -507,7 +515,7 @@ public abstract class JdbcBaseRecordWriter implements JdbcRecordWriter {
             );
             break;
           case BOOLEAN:
-            if (columnType != Types.BOOLEAN) {
+            if (!isColumnTypeBoolean(columnType)) {
               throw new IllegalArgumentException("Incorrect type");
             }
             statement.setBoolean(paramIdx, (Boolean)value);
