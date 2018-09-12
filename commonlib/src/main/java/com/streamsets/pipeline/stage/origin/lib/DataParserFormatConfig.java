@@ -330,16 +330,40 @@ public class DataParserFormatConfig implements DataFormatConfig {
   public char csvCustomDelimiter = '|';
 
   @ConfigDef(
+          required = false,
+          type = ConfigDef.Type.BOOLEAN,
+          defaultValue = "true",
+          label = "Use Escape Character",
+          displayPosition = 415,
+          group = "DATA_FORMAT",
+          dependsOn = "csvFileFormat",
+          triggeredByValue = "CUSTOM"
+  )
+  public boolean useCsvCustomEscape = true;
+
+  @ConfigDef(
       required = false,
       type = ConfigDef.Type.CHARACTER,
       defaultValue = "\\",
       label = "Escape Character",
       displayPosition = 410,
       group = "DATA_FORMAT",
-      dependsOn = "csvFileFormat",
-      triggeredByValue = "CUSTOM"
+      dependsOn = "useCsvCustomEscape",
+      triggeredByValue = "true"
   )
   public char csvCustomEscape = '\\';
+
+  @ConfigDef(
+          required = false,
+          type = ConfigDef.Type.BOOLEAN,
+          defaultValue = "true",
+          label = "Use Quote Character",
+          displayPosition = 415,
+          group = "DATA_FORMAT",
+          dependsOn = "csvFileFormat",
+          triggeredByValue = "CUSTOM"
+  )
+  public boolean useCsvCustomQuote = true;
 
   @ConfigDef(
       required = false,
@@ -348,8 +372,8 @@ public class DataParserFormatConfig implements DataFormatConfig {
       label = "Quote Character",
       displayPosition = 420,
       group = "DATA_FORMAT",
-      dependsOn = "csvFileFormat",
-      triggeredByValue = "CUSTOM"
+      dependsOn = "useCsvCustomQuote",
+      triggeredByValue = "true"
   )
   public char csvCustomQuote = '\"';
 
@@ -1528,8 +1552,8 @@ public class DataParserFormatConfig implements DataFormatConfig {
         .setMode(csvRecordType)
         .setConfig(DelimitedDataConstants.SKIP_START_LINES, csvSkipStartLines)
         .setConfig(DelimitedDataConstants.DELIMITER_CONFIG, csvCustomDelimiter)
-        .setConfig(DelimitedDataConstants.ESCAPE_CONFIG, csvCustomEscape)
-        .setConfig(DelimitedDataConstants.QUOTE_CONFIG, csvCustomQuote)
+        .setConfig(DelimitedDataConstants.ESCAPE_CONFIG, useCsvCustomEscape ? csvCustomEscape : null)
+        .setConfig(DelimitedDataConstants.QUOTE_CONFIG, useCsvCustomQuote ? csvCustomQuote : null)
         .setConfig(DelimitedDataConstants.PARSE_NULL, parseNull)
         .setConfig(DelimitedDataConstants.NULL_CONSTANT, nullConstant)
         .setConfig(DelimitedDataConstants.COMMENT_ALLOWED_CONFIG, csvEnableComments)
