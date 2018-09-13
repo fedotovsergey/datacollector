@@ -74,8 +74,8 @@ public class DelimitedDataParserFactory extends DataParserFactory {
 
     if (getSettings().getMode(CsvMode.class) == CsvMode.CUSTOM) {
       csvFormat = CSVFormat.DEFAULT.withDelimiter(getSettings().getConfig(DelimitedDataConstants.DELIMITER_CONFIG))
-          .withEscape((Character) getSettings().getConfig(DelimitedDataConstants.ESCAPE_CONFIG))
-          .withQuote((Character) getSettings().getConfig(DelimitedDataConstants.QUOTE_CONFIG))
+          .withEscape(null)
+          .withQuote(null)
           .withIgnoreEmptyLines(getSettings().getConfig(DelimitedDataConstants.IGNORE_EMPTY_LINES_CONFIG));
 
       if (getSettings().getConfig(DelimitedDataConstants.COMMENT_ALLOWED_CONFIG)) {

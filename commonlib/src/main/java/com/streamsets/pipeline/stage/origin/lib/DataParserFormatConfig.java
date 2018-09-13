@@ -334,7 +334,7 @@ public class DataParserFormatConfig implements DataFormatConfig {
           type = ConfigDef.Type.BOOLEAN,
           defaultValue = "true",
           label = "Use Escape Character",
-          displayPosition = 415,
+          displayPosition = 405,
           group = "DATA_FORMAT",
           dependsOn = "csvFileFormat",
           triggeredByValue = "CUSTOM"
