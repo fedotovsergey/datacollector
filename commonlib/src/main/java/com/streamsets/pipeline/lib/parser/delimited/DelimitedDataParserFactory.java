@@ -38,7 +38,9 @@ public class DelimitedDataParserFactory extends DataParserFactory {
 
   public static final Map<String, Object> CONFIGS = ImmutableMap.<String, Object>builder()
       .put(DelimitedDataConstants.DELIMITER_CONFIG, '|')
+      .put(DelimitedDataConstants.ESCAPE_ENABLED_CONFIG, true)
       .put(DelimitedDataConstants.ESCAPE_CONFIG, '\\')
+      .put(DelimitedDataConstants.QUOTE_ENABLED_CONFIG, true)
       .put(DelimitedDataConstants.QUOTE_CONFIG, '"')
       .put(DelimitedDataConstants.SKIP_START_LINES, 0)
       .put(DelimitedDataConstants.PARSE_NULL, false)
@@ -73,9 +75,13 @@ public class DelimitedDataParserFactory extends DataParserFactory {
     CSVFormat csvFormat = getSettings().getMode(CsvMode.class).getFormat();
 
     if (getSettings().getMode(CsvMode.class) == CsvMode.CUSTOM) {
+
+      Boolean escapeEnabled = getSettings().getConfig(DelimitedDataConstants.ESCAPE_ENABLED_CONFIG);
+      Boolean quoteEnabled = getSettings().getConfig(DelimitedDataConstants.QUOTE_ENABLED_CONFIG);
+
       csvFormat = CSVFormat.DEFAULT.withDelimiter(getSettings().getConfig(DelimitedDataConstants.DELIMITER_CONFIG))
-          .withEscape(null)
-          .withQuote(null)
+          .withEscape(escapeEnabled == null || escapeEnabled ? (char) getSettings().getConfig(DelimitedDataConstants.ESCAPE_CONFIG) : null)
+          .withQuote(quoteEnabled == null || quoteEnabled ?  (char) getSettings().getConfig(DelimitedDataConstants.QUOTE_CONFIG) : null)
           .withIgnoreEmptyLines(getSettings().getConfig(DelimitedDataConstants.IGNORE_EMPTY_LINES_CONFIG));
 
       if (getSettings().getConfig(DelimitedDataConstants.COMMENT_ALLOWED_CONFIG)) {

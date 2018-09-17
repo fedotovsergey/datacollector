@@ -18,7 +18,9 @@ package com.streamsets.pipeline.lib.util;
 public class DelimitedDataConstants {
 
   public static final String DELIMITER_CONFIG = "delimiterChar";
+  public static final String ESCAPE_ENABLED_CONFIG = "escapeAllowedConfig";
   public static final String ESCAPE_CONFIG = "escapeChar";
+  public static final String QUOTE_ENABLED_CONFIG = "quoteAllowedConfig";
   public static final String QUOTE_CONFIG = "quoteChar";
   public static final String SKIP_START_LINES = "skipStartLines";
   public static final String COMMENT_ALLOWED_CONFIG = "commentAllowed";
