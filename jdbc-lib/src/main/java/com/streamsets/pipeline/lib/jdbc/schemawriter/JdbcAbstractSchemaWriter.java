@@ -76,20 +76,17 @@ public abstract class JdbcAbstractSchemaWriter implements JdbcSchemaWriter {
     StringBuilder sqlString = new StringBuilder(CREATE_TABLE + " ");
     String tableSchema = (schema == null) ? getDefaultSchema() : schema;
 
-    char identifierOpenDelimiter = getIdentifierOpenDelimiter();
-    char identifierCloseDelimiter = getIdentifierCloseDelimiter();
-
     boolean quotedIdentifier = hasDelimitedIdentifier();
 
     if (tableSchema != null) {
-      if (quotedIdentifier) sqlString.append(identifierOpenDelimiter);
+      if (quotedIdentifier) sqlString.append(QUOTED_IDENTIFIER);
       sqlString.append(tableSchema);
-      if (quotedIdentifier) sqlString.append(identifierCloseDelimiter);
+      if (quotedIdentifier) sqlString.append(QUOTED_IDENTIFIER);
       sqlString.append(".");
     }
-    if (quotedIdentifier) sqlString.append(identifierOpenDelimiter);
+    if (quotedIdentifier) sqlString.append(QUOTED_IDENTIFIER);
     sqlString.append(tableName);
-    if (quotedIdentifier) sqlString.append(identifierCloseDelimiter);
+    if (quotedIdentifier) sqlString.append(QUOTED_IDENTIFIER);
     sqlString.append("(\n");
     boolean first = true;
     for (Map.Entry<String, JdbcTypeInfo> entry : recordStructure.entrySet()) {
@@ -99,9 +96,9 @@ public abstract class JdbcAbstractSchemaWriter implements JdbcSchemaWriter {
         sqlString.append(",\n");
       }
 
-      if (quotedIdentifier) sqlString.append(identifierOpenDelimiter);
+      if (quotedIdentifier) sqlString.append(QUOTED_IDENTIFIER);
       sqlString.append(entry.getKey());
-      if (quotedIdentifier) sqlString.append(identifierCloseDelimiter);
+      if (quotedIdentifier) sqlString.append(QUOTED_IDENTIFIER);
 
       sqlString.append(" ")
           .append(entry.getValue().toString());
@@ -117,15 +114,12 @@ public abstract class JdbcAbstractSchemaWriter implements JdbcSchemaWriter {
     StringBuilder sqlString = new StringBuilder(ALTER_TABLE + " ");
     String tableSchema = (schema == null) ? getDefaultSchema() : schema;
 
-    char identifierOpenDelimiter = getIdentifierOpenDelimiter();
-    char identifierCloseDelimiter = getIdentifierCloseDelimiter();
-
     boolean quotedIdentifier = hasDelimitedIdentifier();
 
     if (tableSchema != null) {
-      if (quotedIdentifier) sqlString.append(identifierOpenDelimiter);
+      if (quotedIdentifier) sqlString.append(QUOTED_IDENTIFIER);
       sqlString.append(tableSchema);
-      if (quotedIdentifier) sqlString.append(identifierCloseDelimiter);
+      if (quotedIdentifier) sqlString.append(QUOTED_IDENTIFIER);
       sqlString.append(".");
     }
     sqlString.append(tableName);
@@ -141,9 +135,9 @@ public abstract class JdbcAbstractSchemaWriter implements JdbcSchemaWriter {
           .append("ADD COLUMN")
           .append(" ");
 
-      if (quotedIdentifier) sqlString.append(identifierOpenDelimiter);
+      if (quotedIdentifier) sqlString.append(QUOTED_IDENTIFIER);
       sqlString.append(entry.getKey());
-      if (quotedIdentifier) sqlString.append(identifierCloseDelimiter);
+      if (quotedIdentifier) sqlString.append(QUOTED_IDENTIFIER);
 
       sqlString.append(" ")
           .append(entry.getValue().toString());
@@ -190,14 +184,6 @@ public abstract class JdbcAbstractSchemaWriter implements JdbcSchemaWriter {
 
   @Override
   public String getDefaultSchema() { return null; }
-
-  protected char getIdentifierOpenDelimiter() {
-    return QUOTED_IDENTIFIER;
-  }
-
-  protected char getIdentifierCloseDelimiter() {
-    return QUOTED_IDENTIFIER;
-  }
 
   @Override
   public boolean hasDelimitedIdentifier() {
